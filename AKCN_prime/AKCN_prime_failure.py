@@ -244,7 +244,7 @@ def ErrorRate_5(ps):
     if dis > 0:
         pr = chi2.logsf((dis/ s)**2, 8.) / log(2) + log(ps.n/8., 2)
 
-        print("err of prime (项数取最大值):")
+        print("err of prime (项数取最小值):")
         print("    = 2^%.2f"% pr)
     else:
         print("error! dis <= 0")
