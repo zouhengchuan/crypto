@@ -106,7 +106,7 @@ def ErrorRate_test1(ps):
         s_list.append(geometric_mean(L[i:i+8]))
     
     for ss in s_list:
-       pr += chi2.sf((dis / ss)**2, 8.) / log(2)
+       pr += chi2.sf((dis / ss)**2, 8.)
     pr = log(pr,2)
     print("err of test1(方差几何平均):")
     print("    = 2^%.2f"% pr)
@@ -144,7 +144,7 @@ def ErrorRate_test2(ps):
         theta_list.append(sum(L2[i:i+8]) / sum(L1[i:i+8]))
 
     for (k_sum,theta_sum) in zip(k_list,theta_list):
-        pr += gamma.sf(dis**2, k_sum, scale=theta_sum) / log(2)
+        pr += gamma.sf(dis**2, k_sum, scale=theta_sum)
     pr = log(pr,2)
     print("err of test2(gamma分布逼近):")
     print("    = 2^%.2f"% pr)
@@ -214,7 +214,8 @@ def ErrorRate_test5(ps):
         div_t += (temp-avg_t)**2 / ps.q
 
     # standard deviation s, s^2 = 1.5*n*sigma1^2*(2*sigma2^2 + div_t) + sigma2^2
-    s = sqrt(5 * ps.n / 4 * ps.sigma1**2 * (2 * ps.sigma2**2 + (ps.q/2**ps.t)**2 * div_t) + ps.sigma2**2)
+    # s = sqrt(5 * ps.n / 4 * ps.sigma1**2 * (2 * ps.sigma2**2 + (ps.q/2**ps.t)**2 * div_t) + ps.sigma2**2)
+    s = sqrt((11 * ps.n - 2) / 8 * ps.sigma1**2 * (2 * ps.sigma2**2 + (ps.q/2**ps.t)**2 * div_t) + ps.sigma2**2)
     # minimal distance dis = (q - 1)/2 - sqrt(2)*(q/g + 1) - 1
     dis = (ps.q - 1.) / 2 - sqrt(2.)*(ps.q*1. / ps.g + 1.) - 1
 
