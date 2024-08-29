@@ -29,10 +29,11 @@ def AKCN_to_MLWE(ps):
 
 def summarize(ps):
     MLWE_summarize_attacks(AKCN_to_MLWE(ps))
-    ErrorRate(ps)
-    ErrorRate_new(ps)
-    f = ps_probability(ps)
-    print ("failure origin: %.1f = 2^%.5f"%(f, log(f + 2.**(-300))/log(2)))
+    ErrorRate_1(ps)
+    ErrorRate_2(ps)
+    ErrorRate_3(ps)
+    ErrorRate_4(ps)
+    ErrorRate_5(ps)
     
 
 if __name__ == "__main__":
@@ -44,6 +45,12 @@ if __name__ == "__main__":
     #         ps_test = AKCN_ParameterSet(1152, 3457, 2**k, t, 2, 2)
     #         L.append(ps_test)
     ps_test = AKCN_ParameterSet(768, 3457, 2**3, 10, 2, 2)
+    L.append(ps_test)
+    ps_test = AKCN_ParameterSet(768, 3457, 2**3, 10, 2, 3)
+    L.append(ps_test)
+    ps_test = AKCN_ParameterSet(1152, 3457, 2**4, 10, 2, 2)
+    L.append(ps_test)
+    ps_test = AKCN_ParameterSet(1152, 3457, 2**5, 10, 2, 3)
     L.append(ps_test)
 
     for ps_temp in L:
