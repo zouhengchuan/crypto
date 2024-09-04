@@ -44,13 +44,11 @@ if __name__ == "__main__":
     #     for t in range(8,12):
     #         ps_test = AKCN_ParameterSet(1152, 3457, 2**k, t, 2, 2)
     #         L.append(ps_test)
-    ps_test = AKCN_ParameterSet(768, 3457, 2**3, 10, 2, 2)
-    L.append(ps_test)
-    ps_test = AKCN_ParameterSet(768, 3457, 2**3, 10, 2, 3)
-    L.append(ps_test)
-    ps_test = AKCN_ParameterSet(1152, 3457, 2**4, 10, 2, 2)
+    ps_test = AKCN_ParameterSet(1152, 3457, 2**4, 10, 2, 3)
     L.append(ps_test)
     ps_test = AKCN_ParameterSet(1152, 3457, 2**5, 10, 2, 3)
+    L.append(ps_test)
+    ps_test = AKCN_ParameterSet(1152, 3457, 2**6, 10, 2, 3)
     L.append(ps_test)
 
     for ps_temp in L:
