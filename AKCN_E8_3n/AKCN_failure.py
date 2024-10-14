@@ -29,6 +29,7 @@ def ErrorRate(ps):
     else:
         print("error! dis <= 0")
 
+# 舍入放在外面
 def ErrorRate_new(ps):
     div_t = var_of_law(build_mod_switching_error_law(ps.q, 2**ps.t))
     # standard deviation s, s^2 = 1.5*n*sigma1^2*(2*sigma2^2 + div_t) + sigma2^2
