@@ -10,7 +10,7 @@ def var_p(AX, q, p, str):
         err = i - q/p * floor(p/q * i + 1./2)
         D[err] = D.get(err,0) + AX[i]
     var = var_of_law(D)
-    print("var of %s = %.20f"% (str, var))
+    print("(prime) var of %s = %.20f"% (str, var))
 
 
 
@@ -27,15 +27,12 @@ print("var of uni = %.20f"% var)
 A = build_rq_law(q)
 X = build_centered_binomial_law(2)
 AX_1 = law_product(A, X)
-AX_2 = law_product_2(A, X)
 
-AX = iter_law_convolution(AX_1, k//2, q)
-var_p(AX, q, p, "3n")
+AX = iter_law_convolution(AX_1, k, q)
+var_p(AX, q, p, "0")
 
-for j in range(1,k//2):
-    AX_11 = iter_law_convolution(AX_1, (k//2 - j), q)
-    AX_22 = iter_law_convolution(AX_2, j, q)
-    AX = law_convolution(AX_11, AX_22, q)
+for j in range(1, k):
+    AX = iter_law_convolution(AX_1, (2 * k - j), q)
     var_p(AX, q, p, "%d"% j)
 
 

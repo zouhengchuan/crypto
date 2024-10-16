@@ -26,8 +26,8 @@ print("var of uni = %.20f"% var)
 
 A = build_rq_law(q)
 X = build_centered_binomial_law(2)
-AX_1 = law_product(A, X)
-AX_2 = law_product_2(A, X)
+AX_1 = law_product_3n(A, X)
+AX_2 = law_product_3n_2(A, X)
 
 AX = iter_law_convolution(AX_1, k//2, q)
 var_p(AX, q, p, "3n")

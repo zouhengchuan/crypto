@@ -62,6 +62,14 @@ def iter_law_convolution(A, i, p):
 def law_product(A, B):
     C = {}
     for a in A:
+        for b in B:
+            c = a * b
+            C[c] = C.get(c, 0) + A[a] * B[b]
+    return C
+
+def law_product_3n(A, B):
+    C = {}
+    for a in A:
         for a_prime in A:
             for b in B:
                 for b_prime in B:
@@ -69,7 +77,7 @@ def law_product(A, B):
                     C[c] = C.get(c, 0) + A[a] * B[b] * A[a_prime] * B[b_prime]
     return C
 
-def law_product_2(A, B):
+def law_product_3n_2(A, B):
     C = {}
     for a in A:
         for a_prime in A:
