@@ -106,3 +106,14 @@ def MLWE_summarize_attacks(ps):
 
     # print("    Dual   & %d & %d & %d & %d & %d "%(m_pq, b_pq, int(floor(c_pc)), int(floor(c_pq)), int(floor(c_pp))))
     # return (b_pq, int(floor(c_pc)), int(floor(c_pq)), int(floor(c_pp)))
+
+def MLWE_summarize_attacks_test(q, n):
+    max_m = n
+    s = 2
+
+    (m_pq, b_pq, c_pq) = MLWE_optimize_attack(q, n, max_m, s, cost_attack=LWE_primal_cost, cost_svp=svp_quantum, verbose=False)
+
+    if n <= 800:
+        return ((int(floor(c_pq)) > 160), int(floor(c_pq)))
+    else:
+        return ((int(floor(c_pq)) > 256), int(floor(c_pq)))

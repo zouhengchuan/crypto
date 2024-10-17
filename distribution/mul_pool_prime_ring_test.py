@@ -2,6 +2,7 @@ from sage.all import *
 from sympy import primerange
 from concurrent.futures import ProcessPoolExecutor
 import itertools
+from MLWE_security import MLWE_summarize_attacks_test
 
 def is_irreducible_over_Zq(n, q):
     x = polygen(GF(q), 'x')
@@ -10,8 +11,10 @@ def is_irreducible_over_Zq(n, q):
     return len(factors) == 1 and factors[0][1] == 1
 
 # 定义 n 和 q 的范围
-n_ranges = [primerange(640, 800), primerange(1000, 1200)]
-q_primes = list(primerange(2000, 12000))
+# n_ranges = [primerange(640, 800), primerange(1000, 1200)]
+# q_primes = list(primerange(2000, 12000))
+n_ranges = [[751, 757], [761]]
+q_primes = list(primerange(3000, 5000))
 
 # 生成所有可能的 (n, q) 组合
 pairs = [(n, q) for n_range in n_ranges for n in n_range for q in q_primes]
@@ -19,8 +22,9 @@ pairs = [(n, q) for n_range in n_ranges for n in n_range for q in q_primes]
 # 并行处理函数
 def process_pair(pair):
     n, q = pair
-    if is_irreducible_over_Zq(n, q):
-        return (n, q)
+    (l1, l2) = MLWE_summarize_attacks_test(q, n)
+    if l1 and is_irreducible_over_Zq(n, q):
+        return (n, q, l2)
     return None
 
 # 主函数
@@ -37,7 +41,7 @@ def main():
         
         # 打印找到的不可约对（可选）
         for pair in irreducible_pairs:
-            print(f"Found irreducible pair: n={pair[0]}, q={pair[1]}")
+            print(f"Found irreducible pair: n={pair[0]}, q={pair[1]}, pq={pair[2]}")
     
     # 将所有满足条件的 (n, q) 组合输出到文件
     with open('irreducible_pairs.txt', 'w') as file:
