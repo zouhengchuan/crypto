@@ -31,7 +31,7 @@ AX_1 = law_product(A, X)
 AX = iter_law_convolution(AX_1, k, q)
 var_p(AX, q, p, "0")
 
-for j in range(1, k):
+for j in range(714, k):
     AX = iter_law_convolution(AX_1, (2 * k - j), q)
     var_p(AX, q, p, "%d"% j)
 
