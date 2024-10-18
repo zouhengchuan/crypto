@@ -117,3 +117,13 @@ def MLWE_summarize_attacks_test(q, n):
         return ((int(floor(c_pq)) > 160), int(floor(c_pq)))
     else:
         return ((int(floor(c_pq)) > 256), int(floor(c_pq)))
+    
+def MLWE_summarize_attacks_test2(q, n, s):
+    max_m = n
+
+    (m_pq, b_pq, c_pq) = MLWE_optimize_attack(q, n, max_m, s, cost_attack=LWE_primal_cost, cost_svp=svp_quantum, verbose=False)
+
+    if n <= 800:
+        return ((int(floor(c_pq)) >= 155), int(floor(c_pq)))
+    else:
+        return ((int(floor(c_pq)) >= 251), int(floor(c_pq)))
