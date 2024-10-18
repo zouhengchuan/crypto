@@ -42,6 +42,7 @@ def summarize(ps):
     MLWE_summarize_attacks(AKCN_to_MLWE(ps))
     # ErrorRate(ps)
     ErrorRate_test(ps)
+    prob(ps)
     
 
 if __name__ == "__main__":
@@ -49,8 +50,8 @@ if __name__ == "__main__":
     # ParameterSet(n, eq, ep, eg, eta)
     L = []
     for k in range(10,11):
-       for t in range(2,10):
-           ps_test = AKCN_ParameterSet(768, 13, 10, t, 4)
+       for t in range(4,5):
+           ps_test = AKCN_ParameterSet(768, 11, 9, t, 2)
            L.append(ps_test)
     
     # ps_test1 = AKCN_ParameterSet(768, 11, 9, 4, 2)

@@ -1,28 +1,6 @@
 from math import factorial as fac
-from math import log, ceil, erf, sqrt
+from math import log, ceil, erf, sqrt, floor
 
-
-''' Centered binomial distribution, parameter eta = 1 '''
-def build_cbd1_law():
-    D = build_centered_binomial_law(1)
-    return D
-
-def build_cbd2_law():
-    D = build_centered_binomial_law(2)
-    return D
-
-def build_cbd3_law():
-    D = build_centered_binomial_law(3)
-    return D
-
-''' Centered binomial distribution, parameter eta = 4 '''
-def build_cbd4_law():
-    D = build_centered_binomial_law(4)
-    return D
-
-def build_cbd5_law():
-    D = build_centered_binomial_law(5)
-    return D
 
 ''' Calculate the variance of distribution D '''
 def var_of_law(D):
@@ -78,13 +56,6 @@ def build_centered_binomial_law(k):
         D[i] = centered_binomial_pdf(k, i)
     return D
 
-def build_rounding_law_rlwr(eq,ep):
-    D = {}
-    t = eq - ep - 1
-    for u in range(-2**t, 2**t):    
-        epsilon = u
-        D[epsilon] = D.get(epsilon,0)+2**(ep - eq)
-    return D 
 
 def build_law_square(A, q):
     C = {}
@@ -100,7 +71,8 @@ def mod_switch(x, q, rq):
     :param q: input modulus (integer)
     :param rq: output modulus (integer)
     """
-    return int(round(1.* rq * x / q) % rq)
+    # return int(round(1.* rq * x / q) % rq)
+    return int(floor(1.* rq * x / q + 0.5) % rq)
 
 
 def mod_centered(x, q):
@@ -229,3 +201,19 @@ def tail_probability_frac(D, begin, end):
         if (d < begin) or (d >= end):
             s += D.get(d, 0)
     return s
+
+
+def build_rounding_law_rlwr_powerof2(q,p):
+    D = {}
+    t =int(log(q,2)-log(p,2)-1)
+    for u in range(-2**t + 1, 2**t + 1):    
+        epsilon = u
+        D[epsilon] = D.get(epsilon,0)+ p / q
+    return D
+
+def build_rounding_law_rlwr(q,p):
+    D = {}
+    for u in range(0, q):    
+        epsilon = 1.* q/p * floor( p/q *u + 1/2) - u
+        D[epsilon] = D.get(epsilon,0)+1./q 
+    return D  

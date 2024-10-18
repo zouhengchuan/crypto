@@ -57,14 +57,14 @@ def summarize(ps):
 if __name__ == "__main__":
 
     L = []
-    for u in range(11,10,-1):
-        for v in range(7,3,-1):
-            ps_test = OSKRParameterSet(576, 2, 3, 3, 6337, 2**u, 2**v, ke_ct=2)
-            L.append(ps_test)
+    # for u in range(11,10,-1):
+    #     for v in range(7,3,-1):
+    #         ps_test = OSKRParameterSet(576, 2, 3, 3, 6337, 2**u, 2**v, ke_ct=2)
+    #         L.append(ps_test)
 
-    # ps = OSKRParameterSet(576, 2, 2, 2, 3457, 2**11, 2**7, ke_ct=2)
-    # ps2 = OSKRParameterSet(384, 3, 2, 2, 3457, 2**11, 2**7, ke_ct=2)
-    # L = [ps,ps2]
+    ps = OSKRParameterSet(576, 2, 3, 3, 6337, 2**11, 2**7, ke_ct=2)
+    ps2 = OSKRParameterSet(384, 2, 2, 2, 3457, 2**11, 2**5, ke_ct=2)
+    L = [ps,ps2]
     for ps_test in L:
         print ("--------------------")
         print ("security:")

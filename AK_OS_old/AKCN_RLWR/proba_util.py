@@ -1,5 +1,5 @@
 from math import factorial as fac
-from math import log, ceil, erf, sqrt
+from math import log, ceil, erf, sqrt, floor
 
 
 ''' Centered binomial distribution, parameter eta = 1 '''
@@ -78,6 +78,13 @@ def build_centered_binomial_law(k):
         D[i] = centered_binomial_pdf(k, i)
     return D
 
+def build_rounding_law_rlwr(eq,ep):
+    D = {}
+    t = eq - ep - 1
+    for u in range(-2**t, 2**t):    
+        epsilon = u
+        D[epsilon] = D.get(epsilon,0)+2**(ep - eq)
+    return D 
 
 def build_law_square(A, q):
     C = {}
@@ -86,6 +93,18 @@ def build_law_square(A, q):
         C[c] = C.get(c, 0) + A[a]
     return C
 
+def build_rq_law(q):
+    D = {}
+    for i in range(q):
+        D[i] = 1./q
+    return D
+
+def err_law(AX, q, p):
+    D = {}
+    for i in AX:
+        err = p/q * i - floor(p/q * i + 1./2)
+        D[err] = D.get(err,0) + AX[i]
+    return D
 
 def mod_switch(x, q, rq):
     """ Modulus switching (rounding to a different discretization of the Torus)
@@ -137,6 +156,31 @@ def law_convolution(A, B):
             C[c] = C.get(c, 0) + A[a] * B[b]
     return C
 
+def law_convolution_re(A, B, dis):
+    C = {}
+    for a in A:
+        for b in B:
+            c = floor((a+b)/5) * 5
+            if (c > dis):
+                c = dis + 1
+            C[c] = C.get(c, 0) + A[a] * B[b]
+    return C
+
+def law_convolution_q(A, B, q):
+    C = {}
+    for a in A:
+        for b in B:
+            c = (a+b) % q
+            C[c] = C.get(c, 0) + A[a] * B[b]
+    return C
+
+def law_nconvolution_q(A, B, q):
+    C = {}
+    for a in A:
+        for b in B:
+            c = (a-b) % q
+            C[c] = C.get(c, 0) + A[a] * B[b]
+    return C
 
 def law_product(A, B):
     """ Construct the law of the product of independent variables from two input laws
@@ -150,7 +194,7 @@ def law_product(A, B):
             C[c] = C.get(c, 0) + A[a] * B[b]
     return C
  
-def law_product_over_non_power_of_2(A, B):
+def law_product_over_non_power_of_2(A, B, q):
     """ Construct the law of the non-power-of-2 product of independent variables from two input laws
     :param A: first input law (dictionnary)
     :param B: second input law (dictionnary)
@@ -160,7 +204,7 @@ def law_product_over_non_power_of_2(A, B):
         for a_prime in A:
             for b in B:
                 for b_prime in B:
-                    c = a * b + b_prime * (a + a_prime)
+                    c = (a * b + b_prime * (a + a_prime)) % q
                     C[c] = C.get(c, 0) + A[a] * B[b] * A[a_prime] * B[b_prime]
     return C
 
@@ -191,6 +235,35 @@ def iter_law_convolution(A, i):
             D = clean_dist(D)
     return D
 
+def iter_law_convolution_re(A, i, dis):
+    """ compute the -ith forld convolution of a distribution (using double-and-add)
+    :param A: first input law (dictionnary)
+    :param i: (integer)
+    """
+    D = {0: 1.0}
+    i_bin = bin(i)[2:]  # binary representation of n
+    for ch in i_bin:
+        D = law_convolution_re(D, D, dis)
+        D = clean_dist(D)
+        if ch == '1':
+            D = law_convolution_re(D, A, dis)
+            D = clean_dist(D)
+    return D
+
+def iter_law_convolution_q(A, i, q):
+    """ compute the -ith forld convolution of a distribution (using double-and-add)
+    :param A: first input law (dictionnary)
+    :param i: (integer)
+    """
+    D = {0: 1.0}
+    i_bin = bin(i)[2:]  # binary representation of n
+    for ch in i_bin:
+        D = law_convolution_q(D, D, q)
+        D = clean_dist(D)
+        if ch == '1':
+            D = law_convolution_q(D, A, q)
+            D = clean_dist(D)
+    return D
 
 def tail_probability(D, t):
     '''
