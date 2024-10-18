@@ -5,15 +5,68 @@ import sys
 from proba_util import *
 from scipy.stats import norm
 
+# 3n 上的乘法
 def p2_cyclotomic_error_probability(ps):
-    F = p2_cyclotomic_final_error_distribution(ps)
-    proba = tail_probability_frac(F, -ps.q/4., ps.q/4. - 0.5)
-    f = ps.n * proba
+    # F = p2_cyclotomic_final_error_distribution(ps, 0)
+    # proba = tail_probability_frac(F, -ps.q/4., ps.q/4. - 0.5)
+    # f = ps.n * proba
+    f = 0
+    for k in range(ps.n):
+        F = p2_cyclotomic_final_error_distribution(ps, k)
+        proba = tail_probability_frac(F, -ps.q/4., ps.q/4. - 0.5)
+        f += proba
 
-    print("test of 3n")
+    print("mul in 3n")
     print("failure origin: %.1f = 2^%.5f"%(f, log(f + 2.**(-300))/log(2)))
 
-def p2_cyclotomic_final_error_distribution(ps,k = None):
+def p2_cyclotomic_final_error_distribution(ps, k = None):
+    """ construct the final error distribution in our encryption scheme
+    :param ps: parameter set (ParameterSet)
+    """
+    if k is None:
+        k = ps.n // 2
+    chisr = build_centered_binomial_law(ps.ks)                # LWE error law for the key (s, r)
+    chie = build_centered_binomial_law(ps.ke)                 # LWE error law for the error (e)
+    chie_ct = build_centered_binomial_law(ps.ke_ct)           # LWE error law for the ciphertext (e1,e2)
+
+    Ru = build_mod_switching_error_law(ps.q, ps.rqc)          # rounding error first ciphertext (eu)
+    chiRe = law_convolution_q(chie_ct, Ru, ps.q)                      # LWE + rounding error ciphertext  (e1 + eu)
+
+    if (k < ps.n // 2):
+        B1 = iter_law_product_3n(chie, chisr, ps.n, ps.q, k+1)  # (LWE+Rounding error) * LWE (as in a E*S product) (e*r)
+        B2 = iter_law_product_3n(chisr, chiRe, ps.n, ps.q, k+1) # (s*e1 + s*eu)
+    else:
+        B1 = iter_law_product_3n(chie, chisr, ps.n, ps.q, 0)
+        B2 = iter_law_product_3n(chisr, chiRe, ps.n, ps.q, 0)
+
+    C1 = iter_law_convolution_q(B1, ps.m, ps.q)                         # m*(e*r)
+    C2 = iter_law_convolution_q(B2, ps.m, ps.q)                         # m*(s*e1 + s*eu) 
+
+    C = law_convolution_q(C1, C2, ps.q)                               # m*n*(e*r) + m*n*(s*e1+s*eu)
+
+    Rv = build_mod_switching_error_law(ps.q, ps.rq2)          # Rounding2 (in the ciphertext mask part) (ev)
+    F = law_convolution_q(Rv, chie, ps.q)                             # LWE+Rounding2 error (ev + e2)
+
+    D = law_convolution_q(C, F, ps.q)                                 # Final error (m*n*(e*r) + m*n*(s*e1+s*eu) + ev + e2)
+    return D
+
+
+# 一次项
+def p2_cyclotomic_error_probability_1(ps):
+    f = 0
+    for k in range(ps.n, ps.n * 3 // 2):
+        F = p2_cyclotomic_final_error_distribution_1(ps, k)
+        proba = tail_probability_frac(F, -ps.q/4., ps.q/4. - 0.5)
+        f += proba
+    for k in range(ps.n, ps.n * 3 // 2):
+        F = p2_cyclotomic_final_error_distribution_1(ps)
+        proba = tail_probability_frac(F, -ps.q/4., ps.q/4. - 0.5)
+        f += proba
+
+    print("3n / 2")
+    print("failure origin: %.1f = 2^%.5f"%(f, log(f + 2.**(-300))/log(2)))
+
+def p2_cyclotomic_final_error_distribution_1(ps, k = None):
     """ construct the final error distribution in our encryption scheme
     :param ps: parameter set (ParameterSet)
     """

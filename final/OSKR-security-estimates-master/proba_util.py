@@ -155,6 +155,26 @@ def law_product(A, B):
             C[c] = C.get(c, 0) + A[a] * B[b]
     return C
 
+def law_product_3n(A, B):
+    C = {}
+    for a in A:
+        for a_prime in A:
+            for b in B:
+                for b_prime in B:
+                    c = a * b + b_prime * (a + a_prime)
+                    C[c] = C.get(c, 0) + A[a] * B[b] * A[a_prime] * B[b_prime]
+    return C
+
+def law_product_3n_2(A, B):
+    C = {}
+    for a in A:
+        for a_prime in A:
+            for b in B:
+                for b_prime in B:
+                    c = a * b + b_prime * a_prime
+                    C[c] = C.get(c, 0) + A[a] * B[b] * A[a_prime] * B[b_prime]
+    return C
+
 
 def clean_dist(A):
     """ Clean a distribution to accelerate further computation (drop element of the support with proba less than 2^-300)
@@ -165,6 +185,37 @@ def clean_dist(A):
         if y>2**(-300):
             B[x] = y
     return B
+
+
+def iter_law_product_3n(A, X, n, q, k):
+    AX_1 = law_product_3n(A, X)
+    AX_2 = law_product_3n_2(A, X)
+    AX_11 = iter_law_convolution_q(AX_1, (n//2 - k), q)
+    AX_22 = iter_law_convolution_q(AX_2, k, q)
+    AX = law_convolution_q(AX_11, AX_22, q)
+    return AX
+
+
+def law_convolution_q(A, B, q):
+    C = {}
+    for a in A:
+        for b in B:
+            # c = mod_centered(a + b, q)
+            c = a + b
+            C[c] = C.get(c, 0) + A[a] * B[b]
+    return C
+
+
+def iter_law_convolution_q(A, i, q):
+    D = {0: 1.0}
+    i_bin = bin(i)[2:]  # binary representation of n
+    for ch in i_bin:
+        D = law_convolution_q(D, D, q)
+        D = clean_dist(D)
+        if ch == '1':
+            D = law_convolution_q(D, A, q)
+            D = clean_dist(D)
+    return D
 
 
 def iter_law_convolution(A, i):
