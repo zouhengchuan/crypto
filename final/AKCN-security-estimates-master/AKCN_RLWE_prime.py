@@ -20,7 +20,6 @@ class AKCN_ParameterSet:
         # standard deviation used in LWE attack
         self.sigmaE = sqrt(sqrt(eta1*eta2)/2)
 
-        
 
 def AKCN_to_MLWE(ps):
 
@@ -32,7 +31,6 @@ def AKCN_to_MLWE(ps):
         raise "The security of the ciphertext MLWE may not be stronger than the one of the public key MLWE"    
 
     return MLWEParameterSet(ps.n, ps.q, ps.sigmaE) 
-
 
 def summarize(ps):
     MLWE_summarize_attacks(AKCN_to_MLWE(ps))
