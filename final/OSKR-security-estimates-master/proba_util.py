@@ -73,16 +73,8 @@ def mod_switch(x, q, rq):
     :param q: input modulus (integer)
     :param rq: output modulus (integer)
     """
-    return int(round(1.* rq * x / q) % rq)
+    return int(floor(1.* rq * x / q + 0.5) % rq)
 
-
-def mod_switch_AKCN(x, q, rq):
-    """ Modulus switching (rounding to a different discretization of the Torus)
-    :param x: value to round (integer)
-    :param q: input modulus (integer)
-    :param rq: output modulus (integer)
-    """
-    return (mod_q((1.* rq * x / q), rq))
 
 def mod_switch_floor(x, q, rq):
     """ Modulus switching (rounding to a different discretization of the Torus)
@@ -103,22 +95,6 @@ def mod_centered(x, q):
         return a
     return a - q
 
-
-def build_mod_switching_error_law_AKCN(q, rq):
-    """ Construct Error law: law of the difference introduced by switching from and back a uniform value mod q
-    :param q: original modulus (integer)
-    :param rq: intermediate modulus (integer)
-    """
-    D = {}
-    V = {}
-    for x in range(q):
-        y = mod_switch(x, q, rq)
-        z = mod_switch_AKCN(y, rq, q)
-        d = mod_centered(x - z, q)
-        D[d] = D.get(d, 0) + 1./q
-        V[y] = V.get(y, 0) + 1
-
-    return D
 
 def build_mod_switching_error_law(q, rq):
     """ Construct Error law: law of the difference introduced by con and rec a uniform value mod q
@@ -233,6 +209,6 @@ def tail_probability_frac(D, begin, end):
     if (begin < mi) and (end > ma):
         return 0
     for d in D:  # Summing in reverse for better numerical precision (assuming tails are decreasing)
-        if (d < begin) or (d >= end):
+        if (d < begin) or (d > end):
             s += D.get(d, 0)
     return s
