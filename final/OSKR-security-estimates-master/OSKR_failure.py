@@ -176,12 +176,12 @@ def error_distribution_3(ps):
 def bandwidth_K320(ps):
     seedLen = 40
     pk = seedLen + ceil((ps.m * ps.n * ceil(log(ps.q, 2))) / 8)
-    ct = ceil(ps.m * ps.n * ceil(log(ps.rqc, 2)) / 8) + ceil(ps.n * ceil(log(ps.rq2, 2)) / 8)
+    ct = ceil(ps.m * ps.n * ceil(log(ps.rqc, 2)) / 8) + ceil(320 * ceil(log(ps.rq2, 2)) / 8)
     print('|K| = %d, |pk| = %d, |ct| = %d, bandwidth = %d\n'%(seedLen, pk, ct, (pk+ct)))
 
 
 def bandwidth_K512(ps):
     seedLen = 64
     pk = seedLen + ceil((ps.m * ps.n * ceil(log(ps.q, 2))) / 8)
-    ct = ceil(ps.m * ps.n * ceil(log(ps.rqc, 2)) / 8) + ceil(ps.n * ceil(log(ps.rq2, 2)) / 8)
+    ct = ceil(ps.m * ps.n * ceil(log(ps.rqc, 2)) / 8) + ceil(512 * ceil(log(ps.rq2, 2)) / 8)
     print('|K| = %d, |pk| = %d, |ct| = %d, bandwidth = %d\n'%(seedLen, pk, ct, (pk+ct)))
