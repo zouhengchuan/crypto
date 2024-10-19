@@ -30,8 +30,10 @@ def OSKR_to_MLWE(kps):
 def summarize(ps):
     print ("params: ", ps.__dict__)
     bandwidth_K320(ps)
-    p2_cyclotomic_error_probability(ps)
-    p2_cyclotomic_error_probability_1(ps)
+    error_probability(ps)
+    error_probability_1(ps)
+    error_probability_2(ps)
+    error_probability_3(ps)
     
 
 
