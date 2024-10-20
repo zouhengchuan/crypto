@@ -45,7 +45,7 @@ def error_distribution(ps, k = None):
     C = law_convolution_q(C1, C2, ps.q)                               # m*n*(e*r) + m*n*(s*e1+s*eu)
 
     Rv = build_mod_switching_error_law(ps.q, ps.rq2)          # Rounding2 (in the ciphertext mask part) (ev)
-    F = law_convolution_q(Rv, chie_ct, ps.q)                             # LWE+Rounding2 error (ev + e2)
+    F = law_convolution_q(Rv, chie, ps.q)                             # LWE+Rounding2 error (ev + e2)
 
     D = law_convolution_q(C, F, ps.q)                                 # Final error (m*n*(e*r) + m*n*(s*e1+s*eu) + ev + e2)
     return D
@@ -93,7 +93,7 @@ def error_distribution_1(ps, k = None):
     C = law_convolution(C1, C2)                         # m*n*(e*r) + m*n*(s*e1+s*eu)
 
     Rv = build_mod_switching_error_law(ps.q, ps.rq2)    # Rounding2 (in the ciphertext mask part) (ev)
-    F = law_convolution(Rv, chie_ct)                       # LWE+Rounding2 error (ev + e2)
+    F = law_convolution(Rv, chie)                       # LWE+Rounding2 error (ev + e2)
 
     D = law_convolution(C, F)                           # Final error (m*n*(e*r) + m*n*(s*e1+s*eu) + ev + e2)
     return D
@@ -168,7 +168,7 @@ def error_distribution_3(ps):
     E = law_convolution(B1, B2)
 
     Rv = build_mod_switching_error_law(ps.q, ps.rq2)    # Rounding2 (in the ciphertext mask part) (ev)
-    F = law_convolution(Rv, chie_ct)                       # LWE+Rounding2 error (ev + e2)
+    F = law_convolution(Rv, chie)                       # LWE+Rounding2 error (ev + e2)
 
     return E, F
 

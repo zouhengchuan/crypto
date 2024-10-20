@@ -63,7 +63,7 @@ if __name__ == "__main__":
     #         L.append(ps_test)
 
     ps = OSKRParameterSet(576, 2, 3, 3, 6337, 2**11, 2**7, ke_ct=2)
-    ps2 = OSKRParameterSet(384, 2, 2, 2, 3457, 2**11, 2**5, ke_ct=2)
+    ps2 = OSKRParameterSet(384, 2, 2, 2, 3457, 2**10, 2**5, ke_ct=1)
     L = [ps,ps2]
     for ps_test in L:
         print ("--------------------")

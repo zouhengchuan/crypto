@@ -29,32 +29,29 @@ def OSKR_to_MLWE(kps):
 
 def summarize(ps):
     print ("params: ", ps.__dict__)
-    if ps.n == 384:
-        bandwidth_K320(ps)
-    else:
-        bandwidth_K512(ps)
+    bandwidth_K320(ps)
     error_probability(ps)
     error_probability_1(ps)
+    error_probability_2(ps)
+    error_probability_3(ps)
     
 
 
 if __name__ == "__main__":
 
     L = []
-    eta_k = 3
-    eta_e = 3
-    for u in range(12,10,-1):
-        for v in range(7,3,-1):
-            ps_test = OSKRParameterSet(576, 2, eta_k, eta_k, 6337, 2**u, 2**v, ke_ct=eta_e)
-            L.append(ps_test)
+    # for u in range(11,10,-1):
+    #     for v in range(7,3,-1):
+    #         ps_test = OSKRParameterSet(576, 2, 3, 3, 6337, 2**u, 2**v, ke_ct=2)
+    #         L.append(ps_test)
 
-    # ps = OSKRParameterSet(576, 2, 3, 3, 6337, 2**11, 2**7, ke_ct=2)
-    # ps2 = OSKRParameterSet(384, 2, 3, 3, 6337, 2**11, 2**3, ke_ct=2)
-    # L = [ps,ps2]
+    ps = OSKRParameterSet(576, 2, 3, 3, 6337, 2**11, 2**7, ke_ct=2)
+    ps2 = OSKRParameterSet(384, 2, 3, 3, 6337, 2**11, 2**3, ke_ct=2)
+    L = [ps,ps2]
     for ps_test in L:
-        print ("--------------------")
-        print ("security:")
-        MLWE_summarize_attacks(OSKR_to_MLWE(ps_test))
+        # print ("--------------------")
+        # print ("security:")
+        # MLWE_summarize_attacks(OSKR_to_MLWE(ps_test))
         summarize(ps_test)
         print ()
 
