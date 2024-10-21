@@ -43,9 +43,10 @@ if __name__ == "__main__":
     L = []
     eta_k = 3
     eta_e = 3
-    for u in range(12,10,-1):
+    eta_e_ct = 2
+    for u in range(11,10,-1):
         for v in range(7,3,-1):
-            ps_test = OSKRParameterSet(576, 2, eta_k, eta_k, 6337, 2**u, 2**v, ke_ct=eta_e)
+            ps_test = OSKRParameterSet(576, 2, eta_k, eta_e, 6337, 2**u, 2**v, ke_ct = eta_e_ct)
             L.append(ps_test)
 
     # ps = OSKRParameterSet(576, 2, 3, 3, 6337, 2**11, 2**7, ke_ct=2)
@@ -57,30 +58,3 @@ if __name__ == "__main__":
         MLWE_summarize_attacks(OSKR_to_MLWE(ps_test))
         summarize(ps_test)
         print ()
-
-    # Parameter sets
-    # ps_512 = OSKRParameterSet(256, 2, 3, 3, 3329, 2**10, 2**4, ke_ct=2)
-    # ps_768 = OSKRParameterSet(256, 3, 2, 2, 3329, 2**10, 2**4)
-    # ps_1024 = OSKRParameterSet(512, 2, 2, 2, 3329, 2**11, 2**5)
-
-    # # Analyses
-    # print ("OSKR512 (light):")
-    # print ("--------------------")
-    # #print ("security:")
-    # #MLWE_summarize_attacks(Kyber_to_MLWE(ps_light))
-    # summarize(ps_512)
-    # print ()
-
-    # print ("OSKR768 (recommended):")
-    # print ("--------------------")
-    # #print ("security:")
-    # #MLWE_summarize_attacks(Kyber_to_MLWE(ps_recommended))
-    # summarize(ps_768)
-    # print ()
-
-    # print ("OSKR1024 (paranoid):")
-    # print ("--------------------")
-    # #print ("security:")
-    # #MLWE_summarize_attacks(Kyber_to_MLWE(ps_paranoid))
-    # summarize(ps_1024)
-    # print ()
